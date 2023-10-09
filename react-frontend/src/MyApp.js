@@ -24,7 +24,9 @@ function MyApp() {
       }
     } catch (error) {
       // Handle errors
-      console.error('Error deleting character:', error);
+      console.log(error);
+      return false;
+      //console.error('Error deleting character:', error);
     }
   }
   function updateList(person) { 

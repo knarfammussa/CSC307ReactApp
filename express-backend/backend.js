@@ -80,7 +80,7 @@ app.get('/users/:id', (req, res) => {
         res.status(404).send('Resource not found.');
     else {
         result = {users_list: result};
-        res.send(result);
+        res.status(200).send(result);
     }
 });
 
