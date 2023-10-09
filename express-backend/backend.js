@@ -1,7 +1,12 @@
 import express from "express";
+import cors from 'cors';
+import { v4 as uuidv4 } from 'uuid';
 
 const app = express();
 const port = 8000;
+// const uuid = require('uuid');
+
+app.use(cors());
 
 app.use(express.json());
 
@@ -85,24 +90,30 @@ function findUserById(id) {
 
 app.post('/users', (req, res) => {
     const userToAdd = req.body;
+    userToAdd.id = (generateID());
     addUser(userToAdd);
-    res.status(200).end();
+    //res.send(userToAdd);
+    res.status(201).send(userToAdd);
 });
 
 function addUser(user) {
     users['users_list'].push(user);
 }
 
-app.delete('/users', (req, res) => {
-    const userId = req.body.id;
-    const indexToDelete = users['users_list'].findIndex((user) => user.id === userId)
+app.delete('/users/:id', (req, res) => {
+    const userId = req.params.id;
+    const indexToDelete = users['users_list'].findIndex((user) => user.id === userId);
     if (indexToDelete === -1) {
         return res.status(404).json({message: 'User not found'});
     }
     deleteUser(indexToDelete)
-    res.status(200).end();
+    res.status(204).end();
 });
 
 function deleteUser(user) {
     users['users_list'].splice(user, 1);
+}
+
+function generateID() {
+    return uuidv4();
 }
